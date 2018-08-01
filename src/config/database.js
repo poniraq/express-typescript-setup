@@ -5,7 +5,7 @@ module.exports = {
     driver: 'pg',
     username: 'postgres',
     password: null,
-    database: 'protect_dev',
+    database: 'example_db',
     host: 'localhost',
     dialect: 'postgres',
 

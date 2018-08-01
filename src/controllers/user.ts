@@ -15,7 +15,10 @@ export default class UserController {
     protected renderer: RenderService
   ) {}
 
-  
+
+  /**
+   * Get current user data 
+   */
   @Get('/')
   index(
     @Request() req: Req,
@@ -31,6 +34,9 @@ export default class UserController {
       .catch(next)
   }
 
+  /**
+   * Update current user
+   */
   @Put('/')
   update(
     @Request() req: Req,
@@ -48,6 +54,9 @@ export default class UserController {
       .catch(next)
   }
 
+  /**
+   * Destroy current user 
+   */
   @Delete('/')
   delete(
     @Request() req: Req,
