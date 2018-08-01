@@ -3,14 +3,18 @@ import { HttpError } from 'http-errors';
 
 import { Injectable, Container } from '@decorators/di';
 import { Request, Response, NextFunction } from 'express';
+import { UnauthorizedError } from 'express-jwt';
 
 @Injectable()
 export class ServerErrorMiddleware implements ErrorMiddleware {
   public use(error: Error, _req: Request, res: Response, _next: NextFunction) {
     console.error(error.stack);
 
-    if (error instanceof HttpError) {
-      res.sendStatus(error.statusCode);
+    if (
+      error instanceof HttpError ||
+      error instanceof UnauthorizedError
+    ) {
+      res.sendStatus(error.status);
       return;
     }
 
@@ -18,8 +22,6 @@ export class ServerErrorMiddleware implements ErrorMiddleware {
   }
 }
 
-export function provide() {
-  Container.provide([
-    { provide: ERROR_MIDDLEWARE, useClass: ServerErrorMiddleware }
-  ]);
-}
+Container.provide([
+  { provide: ERROR_MIDDLEWARE, useClass: ServerErrorMiddleware }
+]);

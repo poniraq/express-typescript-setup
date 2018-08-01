@@ -1,3 +1,5 @@
+const { resolve } = require('path');
+
 module.exports = {
   development: {
     driver: 'pg',
@@ -5,6 +7,10 @@ module.exports = {
     password: null,
     database: 'protect_dev',
     host: 'localhost',
-    dialect: 'postgres'
+    dialect: 'postgres',
+
+    modelPaths: [
+      resolve(__dirname, '../models/**/*.model.js')
+    ]
   }
 }

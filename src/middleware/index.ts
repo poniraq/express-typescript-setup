@@ -3,9 +3,20 @@ import { Router } from 'express';
 import RequestIdMiddleware = require('express-request-id');
 import { ParserMiddleware } from './parsers';
 
-const middleware = Router();
+const Middleware = Router();
 
-middleware.use(RequestIdMiddleware());
-middleware.use(ParserMiddleware);
+Middleware.use(RequestIdMiddleware());
+Middleware.use(ParserMiddleware);
 
-export default middleware;
+export * from './errors';
+export * from './association';
+export * from './auth';
+export * from './role';
+export * from './user';
+
+export {
+  Middleware,
+  ParserMiddleware,
+
+  Middleware as default
+}

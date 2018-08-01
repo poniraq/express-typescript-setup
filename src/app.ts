@@ -1,17 +1,15 @@
+require('preload');
+
 import * as express from 'express';
 import { attachControllers } from '@decorators/express';
 
-import middleware from './middleware';
-import * as ErrorMiddleware from './middleware/errors';
-
+import { Middleware } from './middleware';
 import { all } from './controllers';
 
 const app = express();
-app.use(middleware);
+app.use(Middleware);
 
-ErrorMiddleware.provide();
 attachControllers(app, all);
-
 app.listen(3000, () => {
   console.log('listening on port 3000');
 });

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "cross-env NODE_PATH=dist node dist/app.js",
+    "start:debug": "cross-env NODE_PATH=dist node --inspect-brk dist/app.js",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
     "migrate:up": "sequelize db:migrate",
@@ -19,8 +20,10 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
     "express-request-id": "^1.4.0",
     "http-errors": "^1.6.3",
+    "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
@@ -32,11 +35,14 @@
   "devDependencies": {
     "@types/bcrypt": "^2.0.0",
     "@types/express": "^4.16.0",
+    "@types/express-jwt": "0.0.40",
     "@types/http-errors": "^1.6.1",
+    "@types/jsonwebtoken": "^7.2.8",
     "@types/lodash": "^4.14.113",
     "@types/pg-promise": "^5.4.3",
     "@types/reflect-metadata": "^0.1.0",
     "@types/sequelize": "^4.27.24",
-    "typescript": "^2.9.2"
+    "typescript": "^2.8.3",
+    "cross-env": "^5.2.0"
   }
 }
