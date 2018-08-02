@@ -2,6 +2,7 @@ import { Inject } from '@decorators/di';
 import { Body, Controller, Delete, Get, Next, Put, Request, Response } from '@decorators/express';
 import { Request as Req, Response as Res } from 'express';
 import { AuthMiddleware, UserMiddleware } from 'middleware';
+import { ParametersMiddleware } from 'middleware/parameters';
 import { Admin, User } from 'models';
 import { RenderService } from 'services';
 
@@ -37,7 +38,11 @@ export default class UserController {
   /**
    * Update current user
    */
-  @Put('/')
+  @Put('/', [
+    ParametersMiddleware({
+      remove: ['role']
+    })
+  ])
   update(
     @Request() req: Req,
     @Response() res: Res,
