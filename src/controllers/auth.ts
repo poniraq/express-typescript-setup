@@ -1,7 +1,7 @@
 import { Inject } from '@decorators/di';
 import { Body, Controller, Next, Post, Response } from '@decorators/express';
 import { Response as Res } from 'express';
-import { Forbidden, NotFound, Unauthorized } from 'http-errors';
+import { NotFound, Unauthorized } from 'http-errors';
 import { User } from 'models';
 import { AuthService } from 'services';
 
@@ -16,7 +16,7 @@ export default class AuthController {
   @Post('/login')
   login(
     @Response() res: Res,
-    @Body('phone') phone: string,
+    @Body('email') email: string,
     @Body('password') password: string,
     @Next() next
   ) {
@@ -24,11 +24,9 @@ export default class AuthController {
     let user: User;
 
     User
-      .findOne({ where: { phone: phone }})
+      .findOne({ where: { email: email }})
       .tap(item => {
         this.$assertPresent(item)
-        this.$assertActive(item)
-        this.$assertInit(item)
 
         user = item;
       })
@@ -44,7 +42,5 @@ export default class AuthController {
 
   
   // UTILS
-  $assertPresent(user: User, v = true) { if (!!user !== v)             throw new NotFound(); }
-  $assertActive(user: User, v = true)  { if (!!user.active !== v)      throw new Forbidden(); }
-  $assertInit(user: User, v = true)    { if (!!user.initialized !== v) throw new Forbidden(); }
+  $assertPresent(user: User, v = true) { if (!!user !== v) throw new NotFound(); }
 }

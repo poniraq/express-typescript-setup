@@ -3,9 +3,6 @@ import { Request as Req, Response as Res } from 'express';
 import { NotFound } from 'http-errors';
 import { IFindOptions, Model, NonAbstractTypeOfModel } from 'sequelize-typescript';
 
-export function CRUDControllerMeta<T extends Model<T>>() {
-  return class MetaClass extends CRUDController<T>{};
-}
 
 export class CRUDController<T extends Model<T>> {
   constructor(
@@ -31,7 +28,6 @@ export class CRUDController<T extends Model<T>> {
     @Params('id') id: string,
     @Next() next
   ) {
-    console.log(id);
     this.$one(id)
       .then(this.$render)
       .then(item => res.send(item))
@@ -114,4 +110,8 @@ export class CRUDController<T extends Model<T>> {
   protected $delete(id: any) {
     return this.$one(id).then(item => item.destroy());
   }
+}
+
+export function CRUDControllerMeta<T extends Model<T>>() {
+  return class MetaClass extends CRUDController<T>{ };
 }

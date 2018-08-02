@@ -8,13 +8,11 @@ import { UnauthorizedError } from 'express-jwt';
 @Injectable()
 export class ServerErrorMiddleware implements ErrorMiddleware {
   public use(error: Error, _req: Request, res: Response, _next: NextFunction) {
-    console.error(error.stack);
-
     if (
       error instanceof HttpError ||
       error instanceof UnauthorizedError
     ) {
-      res.sendStatus(error.status);
+      res.status(error.status).send(error.message); 
       return;
     }
 

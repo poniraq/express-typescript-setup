@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt';
-import { Render } from 'utils/annotations';
 import { BaseModel } from 'models/base';
-import { AllowNull, BeforeSave, Column, CreatedAt, Default, IsEmail, Model, Table, UpdatedAt } from 'sequelize-typescript';
+import { BeforeSave, Column, CreatedAt, IsEmail, Model, Table, UpdatedAt } from 'sequelize-typescript';
+import { Render } from 'utils/annotations';
 
 export enum USER_ROLE {
   USER = 'USER',
@@ -14,32 +14,12 @@ export enum USER_ROLE {
 })
 export abstract class BaseUser<T extends Model<T>> extends BaseModel<T> {
   @Render
-  @AllowNull
-  @Column
-  name: string;
-
-  @Render
   @IsEmail
-  @AllowNull
   @Column
   email: string;
 
-  @Render
-  @Column
-  phone: string;
-
-  @AllowNull
   @Column
   password: string;
-
-  @Render
-  @Default(false)
-  @Column
-  active: boolean;
-
-  @AllowNull
-  @Column
-  activationCode?: string;
 
   @Render
   @CreatedAt
@@ -49,6 +29,7 @@ export abstract class BaseUser<T extends Model<T>> extends BaseModel<T> {
   @UpdatedAt
   updatedAt: Date;
 
+
   // HOOKS
   @BeforeSave
   static hashPassword<T extends Model<T>>(instance: BaseUser<T>) {
@@ -57,12 +38,6 @@ export abstract class BaseUser<T extends Model<T>> extends BaseModel<T> {
     }
 
     return instance;
-  }
-
-
-  // UTILS
-  get initialized(): boolean {
-    return !!(this.name && this.email && this.password);
   }
 }
 

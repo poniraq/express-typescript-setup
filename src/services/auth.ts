@@ -13,10 +13,8 @@ export class AuthService {
   token(user: User) {
     const payload = {
       id: user.id,
-      phone: user.phone,
-      active: user.active,
-      role: user.role,
-      initialized: user.initialized
+      email: user.email,
+      role: user.role
     };
 
     return signAsync(payload, JwtSecret);
