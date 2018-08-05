@@ -1,15 +1,14 @@
-import { Inject } from '@decorators/di';
+import { Injectable } from '@decorators/di';
 import { Body, Controller, Next, Post, Response } from '@decorators/express';
 import { Response as Res } from 'express';
 import { NotFound, Unauthorized } from 'http-errors';
 import { User } from 'models';
 import { AuthService } from 'services';
 
-
+@Injectable()
 @Controller('/auth')
 export default class AuthController {
   constructor(
-    @Inject(AuthService)
     protected service: AuthService
   ) {}
 
