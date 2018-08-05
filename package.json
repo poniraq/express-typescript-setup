@@ -24,6 +24,7 @@
     "express-request-id": "^1.4.0",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.3.0",
+    "klaw-sync": "^4.0.0",
     "lodash": "^4.17.10",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
@@ -38,11 +39,12 @@
     "@types/express-jwt": "0.0.40",
     "@types/http-errors": "^1.6.1",
     "@types/jsonwebtoken": "^7.2.8",
+    "@types/klaw-sync": "^2.0.0",
     "@types/lodash": "^4.14.113",
     "@types/pg-promise": "^5.4.3",
     "@types/reflect-metadata": "^0.1.0",
     "@types/sequelize": "^4.27.24",
-    "typescript": "^2.8.3",
-    "cross-env": "^5.2.0"
+    "cross-env": "^5.2.0",
+    "typescript": "^2.8.3"
   }
 }
