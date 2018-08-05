@@ -1,5 +1,5 @@
 import { Body, Delete, Get, Next, Params, Post, Put, Query, Request, Response } from '@decorators/express';
-import { Request as Req, Response as Res } from 'express';
+import { NextFunction, Request as Req, Response as Res } from 'express';
 import { NotFound } from 'http-errors';
 import { IFindOptions, Model, NonAbstractTypeOfModel } from 'sequelize-typescript';
 
@@ -26,7 +26,7 @@ export class CRUDController<T extends Model<T>> {
     @Request() _req: Req,
     @Response() res: Res,
     @Params('id') id: string,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     this.$one(id)
       .then(this.$render)
@@ -39,7 +39,7 @@ export class CRUDController<T extends Model<T>> {
     @Request() _req: Req,
     @Response() res: Res,
     @Body() payload: any,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     this.$create(payload)
       .then(this.$render)
@@ -53,7 +53,7 @@ export class CRUDController<T extends Model<T>> {
     @Response() res: Res,
     @Params('id') id: string,
     @Body() payload: any,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     this.$update(id, payload)
       .then(this.$render)
@@ -66,7 +66,7 @@ export class CRUDController<T extends Model<T>> {
     @Request() _req: Req,
     @Response() res: Res,
     @Params('id') id: string,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     this.$delete(id)
       .then(() => res.sendStatus(200))

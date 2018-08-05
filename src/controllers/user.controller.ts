@@ -1,10 +1,11 @@
 import { Injectable } from '@decorators/di';
 import { Body, Controller, Delete, Get, Next, Put, Request, Response } from '@decorators/express';
-import { Request as Req, Response as Res } from 'express';
+import { NextFunction, Request as Req, Response as Res } from 'express';
 import { AuthMiddleware, UserMiddleware } from 'middleware';
 import { ParametersMiddleware } from 'middleware/parameters';
 import { Admin, User } from 'models';
 import { RenderService } from 'services';
+
 
 @Injectable()
 @Controller('/user', [
@@ -24,7 +25,7 @@ export default class UserController {
   index(
     @Request() req: Req,
     @Response() res: Res,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     const user: User | Admin = req.user_instance;
     const renderer = this.renderer;
@@ -47,7 +48,7 @@ export default class UserController {
     @Request() req: Req,
     @Response() res: Res,
     @Body() payload: any,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     const user: User | Admin = req.user_instance;
     const renderer = this.renderer;
@@ -66,7 +67,7 @@ export default class UserController {
   delete(
     @Request() req: Req,
     @Response() res: Res,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     const user: User | Admin = req.user_instance;
 

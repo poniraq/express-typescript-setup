@@ -3,11 +3,11 @@ require('preload');
 import * as express from 'express';
 import { attachControllers } from '@decorators/express';
 
-import { Middleware } from './middleware';
-import { all } from './controllers';
+import { GlobalMiddleware } from 'middleware/global';
+import { all } from 'controllers';
 
 const app = express();
-app.use(Middleware);
+app.use(GlobalMiddleware);
 
 attachControllers(app, all);
 app.listen(3000, () => {

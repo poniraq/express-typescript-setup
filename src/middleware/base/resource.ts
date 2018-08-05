@@ -8,7 +8,7 @@ export abstract class AbstractResourceMiddleware implements Middleware {
     throw new Error('Method not implemented.');
   }
 
-  getResource(_req) {
+  getResource(_req: Request) {
     throw new Error('Method not implemented.');
   }
 

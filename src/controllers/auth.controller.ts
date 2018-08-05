@@ -1,9 +1,10 @@
 import { Injectable } from '@decorators/di';
 import { Body, Controller, Next, Post, Response } from '@decorators/express';
-import { Response as Res } from 'express';
+import { NextFunction, Response as Res } from 'express';
 import { NotFound, Unauthorized } from 'http-errors';
 import { User } from 'models';
 import { AuthService } from 'services';
+
 
 @Injectable()
 @Controller('/auth')
@@ -17,7 +18,7 @@ export default class AuthController {
     @Response() res: Res,
     @Body('email') email: string,
     @Body('password') password: string,
-    @Next() next
+    @Next() next: NextFunction
   ) {
     const service = this.service;
     let user: User;

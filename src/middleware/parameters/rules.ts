@@ -1,9 +1,11 @@
+import { omit } from 'lodash';
+ 
 export type RuleType = 'remove' | 'forbidden' | 'required';
 export type RuleCondition = (source: object, param: string) => boolean;
-export type RuleAction = (source: object, param: string) => void;
+export type RuleAction = (source: object, param: string) => object;
 export type RuleTemplate = (param: string) => string;
 export type RuleConfigs = { [type in RuleType]?: string[] };
-
+ 
 export interface Rule {
   type: RuleType;
   condition: RuleCondition;
@@ -12,8 +14,8 @@ export interface Rule {
   action?: RuleAction;
   template?: RuleTemplate;
 }
-
-
+ 
+ 
 const Rules: Rule[] = [{
   type: 'forbidden',
   condition: (source, param) => source.hasOwnProperty(param),
@@ -26,7 +28,7 @@ const Rules: Rule[] = [{
   type: 'remove',
   defaults: ['id'],
   condition: (source, param) => source.hasOwnProperty(param),
-  action: (source, param) => { delete source[param]; }
+  action: (source, param) => { return omit(source, param); }
 }];
-
+ 
 export { Rules, Rules as default };

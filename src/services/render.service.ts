@@ -6,7 +6,7 @@ import { Model } from 'sequelize-typescript';
 export class RenderService {
   json<T extends Model<T>>(model: T, safe = true) {
     const fields: string[] = (model as any).$safe_fields;
-    let result = {};
+    let result: any = {};
 
     if (!fields || !safe) {
       return model.toJSON();

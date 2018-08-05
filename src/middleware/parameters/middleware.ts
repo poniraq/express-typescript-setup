@@ -1,12 +1,15 @@
 import { Middleware } from '@decorators/express';
 import { NextFunction, Request, Response } from 'express';
 import { BadRequest } from 'http-errors';
-import { concat } from 'lodash';
+import { concat, merge } from 'lodash';
 import { Rule, RuleConfigs, Rules } from './rules';
-
 
 const DefaultSource: SourceType = 'body';
 
+/**
+ * Parameters Middleware
+ * Allows to specify forbidden, required, etc. request parameters
+ */
 export function ParametersMiddleware(config: ParametersMiddlewareConfig) {
   if (!config.source) {
     config.source = DefaultSource;
@@ -14,15 +17,17 @@ export function ParametersMiddleware(config: ParametersMiddlewareConfig) {
 
   return class implements Middleware {
     use(req: Request, _res: Response, next: NextFunction): void {
-      const source: object = req[config.source];
+      let source: object = req[config.source];
       let errors: RuleError[] = [];
 
       Rules.forEach(rule => {
-        const ruleErrors: RuleError[] = this.processRule(source, rule);
-
-        errors = concat(errors, ruleErrors);
+        const result = this.processRule(source, rule);
+        
+        source = result.source;
+        errors = concat(errors, result.errors);
       });
 
+      req[config.source] = source;
       if (errors.length) {
         return next(
           new BadRequest(this.getErrorMessage(errors))
@@ -32,37 +37,50 @@ export function ParametersMiddleware(config: ParametersMiddlewareConfig) {
       next();
     }
 
-    processRule(source: object, rule: Rule) {
+    processRule(source: object, rule: Rule): { source: object, errors: RuleError[]} {
       const defaults = rule.defaults || [];
       const params = concat(defaults, config[rule.type] || []);
       const errors: RuleError[] = [];
 
       params.forEach(param => {
-        const error = this.processParameter(source, rule, param);
+        const result = this.processParameter(source, rule, param);
+        const error = result.error;
 
+        source = result.source;
         if (error) {
           errors.push(error);
         }
       })
 
-      return errors;
+      return {
+        source: source,
+        errors: errors
+      };
     }
 
-    processParameter(source: object, rule: Rule, param: string): RuleError {
+    processParameter(source: object, rule: Rule, param: string): { source: object, error?: RuleError } {
+      let result = {
+        source: source
+      };
+
       if (!rule.condition(source, param)) {
         return;
       }
       
       if (rule.hasOwnProperty('action')) {
-        rule.action(source, param);
+        result.source = source = rule.action(source, param);
       }
       
       if (rule.hasOwnProperty('template')) {
-        return {
-          param: param,
-          message: rule.template(param)
-        };
+        result = merge(result, {
+          error: {
+            param: param,
+            message: rule.template(param)
+          }
+        })
       }
+
+      return result;
     }
 
     getErrorMessage(errors: RuleError[]) {
@@ -73,7 +91,6 @@ export function ParametersMiddleware(config: ParametersMiddlewareConfig) {
 
 
 // TYPES
-
 interface RuleError {
   param: string;
   message: string;
